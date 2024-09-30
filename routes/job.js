@@ -3,6 +3,8 @@ const router = express.Router();
 const { Job } = require("../schema/job.schema");
 const authMiddleware = require("../middleware/auth");
 const isAuth = require("../utils/index");
+const { z } = require("zod");
+const { validateRequest } = require('zod-express-middleware')
 router.post("/", authMiddleware, async (req, res) => {
     try {
         const { name, logo, position, salary, jobType, remote, location, description, about, skills, information } = req.body;
@@ -30,6 +32,19 @@ router.get("/:id", authMiddleware, async (req, res) => {
     }
     res.status(200).json(job);
 })
+// router.get("/:id", validateRequest({
+//     params: z.object({
+//         id: z.string().uuid()
+//     }),
+// }), authMiddleware, async (req, res) => {
+//     const { id } = req.params;
+//     const job = await Job.findById(id);
+//     if (!job) {
+//         return res.status(404).json({ message: "Job not found" });
+//     }
+//     res.status(200).json(job);
+// }
+// );
 router.delete("/:id", authMiddleware, async (req, res) => {
     const { id } = req.params;
     const job = await Job.findById(id);
