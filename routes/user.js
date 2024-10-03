@@ -11,13 +11,14 @@ dotenv.config();
 
 // TODO express validation
 router.post(("/register"), async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, mobile } = req.body;
+    console.log(req.body);
     const ifUserExists = await User.findOne({ email });  // if user exists
     if (ifUserExists) {
         return res.status(400).json({ message: "User already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ name, email, password: hashedPassword });
+    const user = new User({ name, email, password: hashedPassword, mobile });
     await user.save();
     res.status(201).json({ message: "User created successfully" });
 })
